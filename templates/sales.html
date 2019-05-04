@@ -1,0 +1,486 @@
+<!-- Просмотрено -->
+
+{% extends 'redisign_base.html' %}
+
+{% block menu %}
+
+    {% include "menu/sales.html" %}
+
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-3">
+            <div class="card mb-4 box-shadow">
+                <div class="card-header">
+                    <h5 class="my-0 font-weight-normal">План заявок на текущий месяц на услуги:<br>поиск арендаторов</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li>Заключено: {{ plan.4 }}</li>
+                        <li>Осталось: {{ plan.1 }}</li>
+
+                    </ul>
+                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false"> Добавить заявку
+                    </button>
+
+                    <div class="dropdown-menu">
+                        <button type="button" class="btn btn-info dropdown-item" data-toggle="modal" data-target="#NewmyModal">Новая</button>
+                        <a class="dropdown-item" href="/rental_archive">Из архива</a>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-9">
+            <h3> Мои заявки</h3>
+            <h4>Поиск арендаторов</h4>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">Адрес</th>
+                    <th scope="col">Площадь</th>
+                    <th scope="col">Сумма</th>
+                    <th scope="col">Срок аренды</th>
+                    <th scope="col">Статус</th>
+                    <th scope="col">Подробнее</th>
+
+                </tr>
+                </thead>
+                <tbody>
+
+                {% for row in rental_objects %}
+                    <tr>
+                        <td>{{ row.11 }}</td>
+                        <td>{{ row.1 }}</td>
+                        <td>{{ row.7 }}</td>
+                        <td>{{ row.8 }}</td>
+                        <td>{{ row.13 }}</td>
+                        <td><a href="#!" class="btn btn-secondary btn-xs" data-toggle="modal" data-target="#modalView{{ row.0 }}">Подробнее</a></td>
+
+                    </tr>
+                    <!-- MODAL ПРОСМОТР -->
+                    <div id="modalView{{ row.0 }}" class="modal fade" role="dialog">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title"></h4>
+                                </div>
+                                <div class="modal-body">
+                                    <form>
+                                        <div class="form-group">
+                                            <label>Адрес</label>
+                                            <input type="hidden" name="id_rental_object" value="{{ row.0 }}">
+                                            <input type="text" disabled class="form-control" name="address" value="{{ row.11 }}">
+                                            <label>Площадь</label>
+                                            <input type="text" disabled class="form-control" name="square" value = "{{ row.1 }}" />
+                                            <label>Описание</label>
+                                            <input type="text" disabled class="form-control" name="description" value = "{{ row.2 }}" >
+                                            <label>Этаж</label>
+                                            <input type="text" disabled class="form-control" name="floor" value = "{{ row.5 }}" >
+                                            <label>Кол-во этажей</label>
+                                            <input type="text" disabled class="form-control" name="number_of_floors" value = "{{ row.6 }}" >
+                                            <label>Сумма</label>
+                                            <input type="text" disabled class="form-control" name="prise" value = "{{ row.7 }}" >
+                                            <label>Год</label>
+                                            <input type="text" disabled class="form-control" name="year_built" value = "{{ row.3 }}" >
+                                            <label>Материал стен</label>
+                                            <input type="text" disabled class="form-control" name="wall_material" value = "{{ row.4 }}" >
+                                            <label>Арендодатель</label>
+                                            <input type="text" disabled class="form-control" name="wall_material" value = "{{ row.12 }}" >
+                                            <label>Тип</label>
+                                            <input type="text" disabled class="form-control" name="wall_material" value = "{{ row.9 }}" >
+                                            <label>Срок аренды</label>
+                                            <input type="text" disabled class="form-control" name="wall_material" value = "{{ row.8 }}" >
+                                            <label>Ремонт</label>
+                                            <input type="text" disabled class="form-control" name="wall_material" value = "{{ row.10 }}" >
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- MODAL Редактирование-->
+                    <div id="modalEdit{{ row.0 }}" class="modal fade" role="dialog">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title"></h4>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="{{ url_for('rental_objects_update') }}" method="POST">
+                                        <div class="form-group">
+                                            <label>Адрес</label>
+                                            <input type="hidden" name="id_rental_object" value="{{ row.0 }}">
+                                            <input type="text" required class="form-control" name="address" value="{{ row.11 }}">
+                                            <label>Площадь</label>
+                                            <input type="text" required class="form-control" name="square" value = "{{ row.1 }}" />
+                                            <label>Описание</label>
+                                            <input type="text" required class="form-control" name="description" value = "{{ row.2 }}" >
+                                            <label>Этаж</label>
+                                            <input type="text" required class="form-control" name="floor" value = "{{ row.5 }}" >
+                                            <label>Кол-во этажей</label>
+                                            <input type="text" required class="form-control" name="number_of_floors" value = "{{ row.6 }}" >
+                                            <label>Сумма</label>
+                                            <input type="text" required class="form-control" name="prise" value = "{{ row.7 }}" >
+                                            <label>Год</label>
+                                            <input type="text" required class="form-control" name="year_built" value = "{{ row.3 }}" >
+                                            <label>Материал стен</label>
+                                            <input type="text" required class="form-control" name="wall_material" value = "{{ row.4 }}" >
+                                            <label>Арендодатель</label>
+                                            <select id="RequestType" class="form-control" name = "id_client" value="{{ row.12 }}">
+                                                {% for r in clients %}
+                                                    <option selected value= "{{ r.0 }}">
+                                                        {{ r.1 }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                            <label>Тип</label>
+                                            <select id="RequestType" class="form-control" name = "id_object_type" value="{{ row.9 }}" >
+                                                {% for r in object_type %}
+                                                    <option selected value= "{{ row.0 }}">
+                                                        {{ r.1 }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                            <label>Срок аренды</label>
+                                            <select id="RequestType" class="form-control" name = "id_lease_term" value="{{ row.8 }}" >
+                                                {% for r in lease_term %}
+                                                    <option selected value= "{{ r.0 }}">
+                                                        {{ r.1 }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                            <label>Ремонт</label>
+                                            <select id="RequestType" class="form-control" name = "id_object_state" value="{{ row.10 }}" >
+                                                {% for r in object_state %}
+                                                    <option selected value= "{{ r.0 }}">
+                                                        {{ r.1 }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                            <label>Статус</label>
+                                            <select id="RequestType" class="form-control" name = "id_status" value="{{ row.13 }}" >
+                                                {% for r in status %}
+                                                    <option selected value= "{{ r.0 }}">
+                                                        {{ r.1 }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <button class="btn btn-warning" type="submit">Обновить</button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row">
+    <div class="col-3">
+        <div class="card mb-4 box-shadow">
+            <div class="card-header">
+                <h5 class="my-0 font-weight-normal">План заявок на текущий месяц на услуги:<br>поиск объекта аренды</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled mt-3 mb-4">
+                    <li>Заключено: {{ plan.5 }}</li>
+                    <li>Осталось: {{ plan.2 }}</li>
+                </ul>
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false"> Добавить заявку
+                </button>
+                <div class="dropdown-menu">
+                    <button type="button" class="btn btn-info dropdown-item" data-toggle="modal" data-target="#NewmyModal">Новая</button>
+                    <a class="dropdown-item" href="/search_objects_archive">Из архива</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-9">
+        <h4>Поиск объекта аренды</h4>
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th scope="col">Район</th>
+                <th scope="col">Площадь</th>
+                <th scope="col">Максимальная сумма</th>
+                <th scope="col">Тип</th>
+                <th scope="col">Статус</th>
+                <th scope="col">Подробнее</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            {% for row in search_objects %}
+                <tr>
+                    <td>{{ row.0 }}</td>
+                    <td>{{ row.1 }}</td>
+                    <td>{{ row.3 }}</td>
+                    <td>{{ row.7 }}</td>
+                    <td>{{ row.10 }}</td>
+                    <td><a href="#!" class="btn btn-secondary btn-xs" data-toggle="modal" data-target="#ViewSearch{{ row.8 }}">Подробнее</a></td>
+
+                </tr>
+
+                <!-- MODAL ПРОСМОТР-->
+                <div id="ViewSearch{{ row.8 }}" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title"></h4>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="form-group">
+                                        <label>Район</label>
+                                        <input type="text" disabled required class="form-control" name="area" value = "{{ row.0}}">
+                                        <label>Площадь</label>
+                                        <input type="text" disabled required class="form-control" name="area" value = "{{ row.1}}">
+                                        <label>Минимальная цена</label>
+                                        <input type="text" disabled required class="form-control" name="area" value = "{{ row.2}}">
+                                        <label>Максимальная цена</label>
+                                        <input type="text" disabled required class="form-control" name="area" value = "{{ row.3}}">
+                                        <label>Материал стен</label>
+                                        <input type="text" disabled required class="form-control" name="area" value = "{{ row.4}}">
+                                        <label>Этаж</label>
+                                        <input type="text" disabled required class="form-control" name="area" value = "{{ row.5}}">
+                                        <label>Количество этажей</label>
+                                        <input type="text" disabled required class="form-control" name="area" value = "{{ row.6}}">
+                                        <label>Тип</label>
+                                        <input type="text" disabled required class="form-control" name="area" value = "{{ row.7}}">
+                                        <label>Арендатор</label>
+                                        <input type="text" disabled required class="form-control" name="area" value = "{{ row.9}}">
+                                        <label>Статус</label>
+                                        <input type="text" disabled required class="form-control" name="area" value = "{{ row.10}}">
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MODAL Редактирование-->
+                <div id="EditSearch{{ row.8 }}" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title"></h4>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{{ url_for('search_objects_update') }}" method="POST">
+                                    <div class="form-group">
+                                        <label>Район</label>
+                                        <input type="hidden" name="id" value="{{ row.8 }}">
+                                        <input type="text" required class="form-control" name="area" value="{{ row.0 }}">
+                                        <label>Площадь</label>
+                                        <input type="text" required class="form-control" name="square" value = "{{ row.1 }}" />
+                                        <label>Минимальная сумма</label>
+                                        <input type="text" required class="form-control" name="min_price" value = "{{ row.2 }}" >
+                                        <label>Максимальная сумма</label>
+                                        <input type="text" required class="form-control" name="max_price" value = "{{ row.3 }}" >
+                                        <label>Материал стен</label>
+                                        <input type="text" required class="form-control" name="wall_material" value = "{{ row.4 }}" >
+                                        <label>Этаж</label>
+                                        <input type="text" required class="form-control" name="floor" value = "{{ row.5 }}" >
+                                        <label>Кол-во этажей</label>
+                                        <input type="text" required class="form-control" name="number_of_floor" value = "{{ row.6 }}" >
+                                        <label>Арендатор</label>
+                                        <select id="RequestType" class="form-control" name = "id_client" value="{{ row.9 }}">
+                                            {% for row in clients %}
+                                                <option selected value= "{{ row.0 }}">
+                                                    {{ row.1 }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                        <label>Тип</label>
+                                        <select id="RequestType" class="form-control" name = "id_object_type" value="{{ row.7 }}" >
+                                            {% for row in object_type %}
+                                                <option selected value= "{{ row.0 }}">
+                                                    {{ row.1 }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                        <label>Статус</label>
+                                        <select id="RequestType" class="form-control" name = "status_type" value="{{ row.10 }}" >
+                                            {% for row in status %}
+                                                <option selected value= "{{ row.0 }}">
+                                                    {{ row.1 }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <button class="btn btn-warning" type="submit">Обновить</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ url_for('search_objects_add') }}" method="POST">
+                        <div class="form-group">
+                            <label>Район</label>
+                            <input type="text" required class="form-control" name="area" value = "{{request.form.get('area','') }}">
+                            <label>Площадь</label>
+                            <input type="text" required class="form-control" name="square" value = "{{request.form.get('square','') }}">
+                            <label>Минимальная сумма</label>
+                            <input type="text" required class="form-control" name="min_price" value = "{{request.form.get('min_price','') }}">
+                            <label>Максимальная сумма</label>
+                            <input type="text" required class="form-control" name="max_price" value = "{{request.form.get('max_price','') }}">
+                            <label>Материал стен</label>
+                            <input type="text" required class="form-control" name="wall_material" value = "{{request.form.get('wall_material','') }}">
+                            <label>Этаж</label>
+                            <input type="text" required class="form-control" name="floor" value = "{{request.form.get('floor','') }}">
+                            <label>Кол-во этажей</label>
+                            <input type="text" required class="form-control" name="number_of_floor" value = "{{request.form.get('number_of_floor','') }}">
+
+                            <label>Арендатор</label>
+                            <select id="RequestType" class="form-control" name = "id_client" value="{{request.form.get('id_client','') }}" >
+                                {% for row in clients %}
+                                    <option selected value= "{{ row.0 }}">
+                                        {{ row.1 }}
+
+                                    </option>
+                                {% endfor %}
+                            </select>
+
+                            <label>Тип</label>
+                            <select id="RequestType" class="form-control"  name = "id_object_type" value="{{request.form.get('id_object_type','') }}">
+                                {% for row in object_type %}
+                                    <option selected value= "{{ row.0 }}">
+                                        {{ row.1 }}
+
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-primary" type="sbumit">Добавить</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="NewmyModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ url_for('rental_objects_add') }}" method="POST">
+                        <div class="form-group">
+                            <label>Адрес</label>
+                            <input type="text" required class="form-control" name="address" value = "{{request.form.get('address','') }}">
+                            <label>Площадь</label>
+                            <input type="text" required class="form-control" name="square" value = "{{request.form.get('square','') }}">
+                            <label>Описание</label>
+                            <input type="text" required class="form-control" name="description" value = "{{request.form.get('description','') }}">
+                            <label>Этаж</label>
+                            <input type="text" required class="form-control" name="floor" value = "{{request.form.get('floor','') }}">
+                            <label>Кол-во этажей</label>
+                            <input type="text" required class="form-control" name="number_of_floors" value = "{{request.form.get('number_of_floors','') }}">
+                            <label>Сумма</label>
+                            <input type="text" required class="form-control" name="prise" value = "{{request.form.get('prise','') }}">
+                            <label>Год</label>
+                            <input type="text" required class="form-control" name="year_built" value = "{{request.form.get('year_built','') }}">
+                            <label>Материал стен</label>
+                            <input type="text" required class="form-control" name="wall_material" value = "{{request.form.get('wall_material','') }}">
+                            <label>Арендодатель</label>
+                            <select id="RequestType" class="form-control" name = "id_client" value="{{request.form.get('id_client','') }}" >
+                                {% for row in clients %}
+                                    <option selected value= "{{ row.0 }}">
+                                        {{ row.1 }}
+
+                                    </option>
+                                {% endfor %}
+                            </select>
+
+                            <label>Тип</label>
+                            <select id="RequestType" class="form-control"  name = "id_object_type" value="{{request.form.get('id_object_type','') }}">
+                                {% for row in object_type %}
+                                    <option selected value= "{{ row.0 }}">
+                                        {{ row.1 }}
+
+                                    </option>
+                                {% endfor %}
+                            </select>
+
+                            <label>Срок аренды</label>
+                            <select id="RequestType" class="form-control"  name = "id_lease_term" value="{{request.form.get('id_lease_term','') }}">
+                                {% for row in lease_term %}
+                                    <option selected value= "{{ row.0 }}">
+                                        {{ row.1 }}
+
+                                    </option>
+                                {% endfor %}
+                            </select>
+
+                            <label>Ремонт</label>
+                            <select id="RequestType" class="form-control"  name = "id_object_state" value="{{request.form.get('id_object_state','') }}">
+                                {% for row in object_state %}
+                                    <option selected value= "{{ row.0 }}">
+                                        {{ row.1 }}
+
+                                    </option>
+                                {% endfor %}
+                            </select>
+
+                            <label>Агент</label>
+                            <select id="RequestType" class="form-control"  name = "id_agent" value="{{request.form.get('id_agent','') }}">
+                                {% for row in agent %}
+                                    {% if row.2 == 'Агент' %}
+                                        <option selected value= "{{ row.3 }}">
+                                            {{ row.4 }}
+
+                                        </option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-primary" type="sbumit">Добавить</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

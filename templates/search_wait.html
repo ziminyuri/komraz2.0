@@ -1,0 +1,158 @@
+{% extends 'redisign_base.html' %}
+
+{% block menu %}
+
+    {% if agent_flag == "0" %}
+    {% include "menu/sales.html" %}
+    {% else %}
+    {% include "menu/agent.html" %}
+    {% endif %}
+
+{% endblock %}
+
+{% block content %}
+    <a class="btn btn-primary" href="/search_objects" role="button">Актуальные</a>
+    <a class="btn btn-primary" href="/search_objects_archive" role="button">Архив</a>
+
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col">Район</th>
+            <th scope="col">Площадь</th>
+            <th scope="col">Максимальная сумма</th>
+            <th scope="col">Тип</th>
+            <th scope="col">Арендатор</th>
+            <th scope="col">Подробнее</th>
+            {% if agent_flag == "0" %}
+            <th scope="col">Редактировать</th>
+            <th scope="col">Удалить</th>
+            {% endif %}
+        </tr>
+        </thead>
+        <tbody>
+        {% for row in search_objects %}
+            {%if row.10 == "Ожидает оплаты" %}
+                <tr>
+                <td>{{ row.0 }}</td>
+                <td>{{ row.1 }}</td>
+                <td>{{ row.3 }}</td>
+                <td>{{ row.7 }}</td>
+                <td>{{ row.9 }}</td>
+                <td><a href="#!" class="btn btn-secondary btn-xs" data-toggle="modal" data-target="#modalView{{ row.8 }}">Подробнее</a></td>
+                {% if agent_flag == "0" %}
+                <td><a href="#!" class="btn btn-info btn-xs" data-toggle="modal" data-target="#modalEdit{{ row.8 }}">Редактировать</a></td>
+                <td>
+                    <a href="/search_objects/delete/{{ row.8 }}" class="btn btn-danger btn-xs" onclick="return confirm('Вы действительно хотите удалить')">Удалить</a>
+                </td>
+                    {% endif %}
+            {% endif %}
+        <!-- Modal Редактирование -->
+
+        <div id="modalEdit{{ row.8 }}" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title"></h4>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{{ url_for('search_objects_update') }}" method="POST">
+                            <div class="form-group">
+                                <label>Район</label>
+                                <input type="hidden" name="id" value="{{ row.8 }}">
+                                <input type="text" required class="form-control" name="area" value="{{ row.0 }}">
+                                <label>Площадь</label>
+                                <input type="text" required class="form-control" name="square" value = "{{ row.1 }}" />
+                                <label>Минимальная сумма</label>
+                                <input type="text" required class="form-control" name="min_price" value = "{{ row.2 }}" >
+                                <label>Максимальная сумма</label>
+                                <input type="text" required class="form-control" name="max_price" value = "{{ row.3 }}" >
+                                <label>Материал стен</label>
+                                <input type="text" required class="form-control" name="wall_material" value = "{{ row.4 }}" >
+                                <label>Этаж</label>
+                                <input type="text" required class="form-control" name="floor" value = "{{ row.5 }}" >
+                                <label>Кол-во этажей</label>
+                                <input type="text" required class="form-control" name="number_of_floor" value = "{{ row.6 }}" >
+                                <label>Арендатор</label>
+                                <select id="RequestType" class="form-control" name = "id_client" value="{{ row.8 }}">
+                                    {% for row in clients %}
+                                        <option selected value= "{{ row.0 }}">
+                                            {{ row.1 }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                                <label>Тип</label>
+                                <select id="RequestType" class="form-control" name = "id_object_type" value="{{ row.7 }}" >
+                                    {% for row in object_type %}
+                                        <option selected value= "{{ row.0 }}">
+                                            {{ row.1 }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                                <label>Статус</label>
+                                <select id="RequestType" class="form-control" name = "status_type" value="{{ row.10 }}" >
+                                    {% for row in status %}
+                                        <option selected value= "{{ row.0 }}">
+                                            {{ row.1 }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <button class="btn btn-warning" type="submit">Обновить</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Просмотр -->
+
+        <div id="modalView{{ row.8 }}" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title"></h4>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label>Район</label>
+                                <input type="hidden" name="id" value="{{ row.8 }}">
+                                <input type="text" disabled class="form-control" name="area" value="{{ row.0 }}">
+                                <label>Площадь</label>
+                                <input type="text" disabled class="form-control" name="square" value = "{{ row.1 }}" />
+                                <label>Минимальная сумма</label>
+                                <input type="text" disabled class="form-control" name="min_price" value = "{{ row.2 }}" >
+                                <label>Максимальная сумма</label>
+                                <input type="text" disabled class="form-control" name="max_price" value = "{{ row.3 }}" >
+                                <label>Материал стен</label>
+                                <input type="text" disabled class="form-control" name="wall_material" value = "{{ row.4 }}" >
+                                <label>Этаж</label>
+                                <input type="text" disabled class="form-control" name="floor" value = "{{ row.5 }}" >
+                                <label>Кол-во этажей</label>
+                                <input type="text" disabled class="form-control" name="number_of_floor" value = "{{ row.6 }}" >
+                                <label>Арендатор</label>
+                                <input type="text" disabled class="form-control" name="number_of_floor" value = "{{ row.9 }}" >
+                                <label>Тип</label>
+                                <input type="text" disabled class="form-control" name="area" value="{{ row.7 }}">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

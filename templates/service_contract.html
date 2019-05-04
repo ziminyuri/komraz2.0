@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block header %}
+
+{% include "menu/agent.html" %}
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+{% block content %}
+
+<form action="/file_downloads_services" method="POST">
+
+            <input type="submit" class="btn btn-dark" value="Скачать форму договора">
+      </form>
+
+
+      </td>
+    <table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Номер</th>
+      <th scope="col">Дата</th>
+        <th scope="col">Сумма</th>
+        <th scope="col">Тип</th>
+        <th scope="col">Скачать</th>
+        <th scope="col">Редактировать</th>
+        <th scope="col">Удалить</th>
+
+    </tr>
+  </thead>
+  <tbody>
+
+
+{% for row in service_contract %}
+    {%if row.4 == "Договор оказания возмездных услуг" %}
+  <tr>
+      <td>{{ row.0 }}</td>
+      <td>{{ row.1 }}</td>
+        <td>{{ row.2 }}</td>
+  <td>{{ row.3 }}</td>
+
+
+ <td>
+<form action="/file_downloads_services" method="POST">
+
+            <input type="submit" class="btn btn-dark" value="Скачать">
+      </form>
+
+  <td><a href="#!" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modalEdit{{ row.8 }}">Редактировать</a></td>
+      <td>
+ <a href="/search_objects/delete/{{ row.8 }}" class="btn btn-danger btn-xs" onclick="return confirm('Вы действительно хотите удалить')">Удалить</a>
+</td>
+
+  </tr>
+    {% endif %}
+  {% endfor %}
+
+
+
+
+  </tbody>
+</table>
+
+
+
+
+
+
+
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% block footer %}
+<nav class="navbar fixed-bottom navbar-light bg-light">
+  <p align="center" a> Copyright 2019<br>Авторы: Зимин, Шанина</p>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+
+  </button>
+
+</nav>
+{% endblock %}

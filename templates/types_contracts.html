@@ -1,0 +1,26 @@
+{% extends 'redisign_base.html' %}
+{% block menu %}
+    {% if agent_flag == "0" %}
+    {% include "menu/sales.html" %}
+    {% else %}
+    {% include "menu/agent.html" %}
+    {% endif %}
+{% endblock %}
+{% block content %}
+    <table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Вид</th>
+      <th scope="col">Тип</th>
+    </tr>
+  </thead>
+  <tbody>
+{% for row in types_contracts %}
+  <tr>
+      <td>{{ row.1 }}</td>
+      <td>{{ row.0 }}</td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

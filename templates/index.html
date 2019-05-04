@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block header %}
+
+
+
+
+{% endblock %}
+
+
+{% block content %}
+<form action="{{ url_for ('main') }}" method="post">
+  <div class="form-group">
+    <label for="exampleInputLogin">Логин</label>
+    <input type="login" required class="form-control" id="exampleInputLogin" aria-describedby="loginHelp" placeholder="Введите логин" name="username" value = "{{request.form.get('username','') }}">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Пароль</label>
+    <input type="password" required class="form-control" id="exampleInputPassword1" placeholder="Пароль" name="pas" value = "{{request.form.get('pas','') }}">
+  </div>
+        Выберите тип пользователя    <select id="RequestType" name = "type" value = "{{request.form.get('type','') }}" >
+     <option selected value="1">Агент</option>
+     <option value="2">Сотрудник отдела продаж</option>
+    <option value="4">Администратор системы</option>
+    </select>
+        <br>
+        <br>
+  <button type="submit" class="btn btn-primary">Войти</button>
+        <br><br>
+        <p>{{ e }}</p>
+</form>
+{% endblock %}
+
+{% block footer %}
+<nav class="navbar fixed-bottom navbar-light bg-light">
+  <p align="center" a> Copyright 2019<br>Авторы: Зимин, Шанина</p>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+
+  </button>
+
+</nav>
+{% endblock %}

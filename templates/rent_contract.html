@@ -1,0 +1,118 @@
+{% extends 'redisign_base.html' %}
+{% block menu %}
+    {% if agent_flag == "0" %}
+    {% include "menu/sales.html" %}
+    {% else %}
+    {% include "menu/agent.html" %}
+    {% endif %}
+{% endblock %}
+{% block content %}
+    <div class="row">
+    {% if agent_flag != "0" %}
+        <form action="/file_downloads_services" method="POST">
+
+            <input type="submit" class="btn btn-outline-primary" value="Создать">
+      </form>
+    {% endif %}
+<form action="/file_downloads_rent_temp" method="POST">
+
+            <input type="submit" class="btn btn-info" value="Скачать форму договора">
+      </form>
+    </div>
+      </td>
+    <table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Номер</th>
+        <th scope="col">Дата</th>
+        <th scope="col">Адрес</th>
+        <th scope="col">Сумма</th>
+        <th scope="col">Подробнее</th>
+        {% if agent_flag != "0" %}
+        <th scope="col">Редактировать</th>
+        {% endif %}
+        <th scope="col">Скачать</th>
+
+
+    </tr>
+  </thead>
+  <tbody>
+
+
+{% for contract in contracts %}
+{% if contract.5 == "Договор аренды" %}
+  <tr>
+      <td>{{ contract.0 }}</td>
+      <td>{{ contract.1 }}</td>
+      <td>{{ contract.3 }}</td>
+      <td>{{ contract.2 }}</td>
+      <td><a href="#!" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modalView{{ contract.0 }}">Подробнее</a></td>
+      {% if agent_flag != "0" %}
+      <td><a href="#!" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modalView{{ contract.0 }}">Редактировать</a></td>
+          {% endif %}
+      <td> <form action="/file_downloads_rent" method="POST">
+           <input type="hidden" name="number_of_dogovor" value="{{ contract.0 }}">
+          <input type="hidden" name="date_of_rent" value="{{ contract.1}}">
+          <input type="hidden" name="landlord" value="{{ contract.16}}">
+          <input type="hidden" name="tenant" value="{{ contract.15 }}">
+          <input type="hidden" name="address" value="{{ contract.3 }}">
+          <input type="hidden" name="srok" value="На длительный срок">
+          <input type="hidden" name="price" value="{{ contract.2 }}">
+            <input type="submit" class="btn btn-dark" value="Скачать">
+      </form> </td>
+  </tr>
+
+     <!-- Подробнее -->
+
+
+ <div id="modalView{{ contract.0 }}" class="modal fade" role="dialog">
+   <div class="modal-dialog">
+     <div class="modal-content">
+       <div class="modal-header">
+         <button type="button" class="close" data-dismiss="modal">&times;</button>
+         <h4 class="modal-title"></h4>
+       </div>
+       <div class="modal-body">
+         <form>
+           <div class="form-group">
+             <label>Номер договора</label>
+             <input type="text" disabled class="form-control" name="area" value="{{ contract.0 }}">
+              <label>Дата</label>
+               <input type="text" disabled class="form-control" name="area" value="{{ contract.1 }}">
+               <label>Сумма договора</label>
+               <input type="text" disabled class="form-control" name="area" value="{{ contract.2 }}">
+               <label>Адрес объекта</label>
+               <input type="text" disabled class="form-control" name="area" value="{{ contract.3 }}">
+               <label>Площадь</label>
+               <input type="text" disabled class="form-control" name="area" value="{{ contract.7 }}">
+               <label>Год постройки</label>
+               <input type="text" disabled class="form-control" name="area" value="{{ contract.9 }}">
+               <label>Материал стен</label>
+               <input type="text" disabled class="form-control" name="area" value="{{ contract.10 }}">
+               <label>Этаж</label>
+               <input type="text" disabled class="form-control" name="area" value="{{ contract.11 }}">
+               <label>Кол-во этажей</label>
+               <input type="text" disabled class="form-control" name="area" value="{{ contract.12 }}">
+               <label>Тип дома</label>
+               <input type="text" disabled class="form-control" name="area" value="{{ contract.13 }}">
+               <label>Ремонт</label>
+               <input type="text" disabled class="form-control" name="area" value="{{ contract.14 }}">
+                <label>Арендатор</label>
+               <input type="text" disabled class="form-control" name="area" value="{{ contract.15 }}">
+                <label>Арендодатель</label>
+               <input type="text" disabled class="form-control" name="area" value="{{ contract.16 }}">
+           </div>
+
+         </form>
+       </div>
+       <div class="modal-footer">
+         <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+       </div>
+     </div>
+   </div>
+ </div>
+{% endif %}
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

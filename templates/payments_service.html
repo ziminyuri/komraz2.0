@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+
+{% block header %}
+
+{% include "menu/sales.html" %}
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+{% block content %}
+
+
+    <table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Дата договора</th>
+        <th scope="col">Сумма</th>
+        <th scope="col">Объект недвижимости</th>
+        <th scope="col">Тип договора</th>
+        <th scope="col">Статус</th>
+        <th scope="col">Оплата</th>
+    </tr>
+  </thead>
+  <tbody>
+
+
+{% for row in payments_service %}
+
+  {%if row.5 == "Ожидает оплаты" %}
+
+  <tr>
+
+    <td>{{ row.0 }}</td>
+    <td>{{ row.1 }}</td>
+    <td>{{ row.2 }}</td>
+    <td>{{ row.3 }}</td>
+    <td>{{ row.4 }}</td>
+    <td>{{ row.5 }}</td>
+
+
+   <td>
+    <!--
+    <a href="{{ row.14 }}" class="btn btn-danger btn-xs btn-block" onclick="return confirm('Вы действительно хотите подтвердить оплату?')">Не оплачено</a>
+    -->
+       <a href="#" class="btn btn-danger btn-xs btn-block" >Не оплачено</a>
+
+   </td>
+
+  </tr>
+
+{% endif %}
+
+{%if row.5 != "Ожидает оплаты" %}
+
+  <tr>
+
+    <td>{{ row.0 }}</td>
+    <td>{{ row.1 }}</td>
+    <td>{{ row.2 }}</td>
+    <td>{{ row.3 }}</td>
+    <td>{{ row.4 }}</td>
+    <td>{{ row.5 }}</td>
+
+
+   <td>
+    <a class="btn btn-success btn-xs btn-block" disabled> Оплачено </a>
+   </td>
+
+  </tr>
+
+{% endif %}
+
+
+  {% endfor %}
+
+
+
+  </tbody>
+</table>
+
+
+
+
+
+
+
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% block footer %}
+<nav class="navbar fixed-bottom navbar-light bg-light">
+  <p align="center" a> Copyright 2019<br>Авторы: Зимин, Шанина</p>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+
+  </button>
+
+</nav>
+{% endblock %}

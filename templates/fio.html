@@ -1,0 +1,38 @@
+{% extends 'redisign_base.html' %}
+
+{% block menu %}
+
+    {% if agent_flag == "0" %}
+    {% include "menu/sales.html" %}
+    {% else %}
+    {% include "menu/agent.html" %}
+    {% endif %}
+{% endblock %}
+{% block content %}
+    <table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Фамилия</th>
+      <th scope="col">Имя</th>
+      <th scope="col">Отчество</th>
+        <th scope="col">Пол</th>
+      <th scope="col">Серия и Номер паспорта</th>
+      <th scope="col">Дата рождения</th>
+        <th scope="col">Гражданство</th>
+    </tr>
+  </thead>
+  <tbody>
+{% for row in fio %}
+  <tr>
+      <td>{{ row.1 }}</td>
+      <td>{{ row.2 }}</td>
+      <td>{{ row.3 }}</td>
+      <td>{{ row.4 }}</td>
+      <td>{{ row.0 }}</td>
+      <td>{{ row.5 }}</td>
+      <td>{{ row.6 }}</td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,88 @@
+<!-- Просмотрено -->
+
+{% extends 'redisign_base.html' %}
+
+{% block menu %}
+
+    {% include "menu/sales.html" %}
+
+{% endblock %}
+
+{% block content %}
+
+    <!--
+<div class="btn-group">
+<button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Скачать форму
+  </button>
+  <div class="dropdown-menu">
+    <a class="dropdown-item" href="#">Коммерческая</a>
+    <a class="dropdown-item" href="#">Жилая</a>
+      <a class="dropdown-item" href="#">Гараж</a>
+
+
+  </div>
+</div>
+
+-->
+<form action="/file_downloads_lease" method="POST">
+
+            <input type="submit" class="btn btn-info" value="Скачать форму договора">
+      </form>
+
+    <table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Дата договора</th>
+        <th scope="col">Сумма</th>
+        <th scope="col">Объект недвижимости</th>
+        <th scope="col">Тип договора</th>
+        <th scope="col">Скачать договор</th>
+
+    </tr>
+  </thead>
+  <tbody>
+{% for row in lease_contract %}
+    {%  if row.4 == "Поиск объекта аренды" %}
+  <tr>
+      <td>{{ row.0 }}</td>
+      <td>{{ row.1 }}</td>
+  <td>{{ row.2 }}</td>
+  <td>{{ row.3 }}</td>
+  <td>{{ row.4 }}</td>
+<td>
+<form action="/file_downloads_services" method="POST">
+    <input type="hidden" name="number_of_dogovor" value="{{ row.0 }}">
+    <input type="hidden" name="date_of_rent" value="{{ row.1 }}">
+    <input type="hidden" name="owner" value="Дмитриев Ермак Созонович">
+    <input type="hidden" name="name" value="{{ row.4 }}">
+            <input type="submit" class="btn btn-dark" value="Скачать">
+      </form>
+  </td>
+  </tr>
+    {% endif %}
+
+        {%  if row.4 == "Поиск арендаторов" %}
+  <tr>
+      <td>{{ row.0 }}</td>
+      <td>{{ row.1 }}</td>
+  <td>{{ row.2 }}</td>
+  <td>{{ row.3 }}</td>
+  <td>{{ row.4 }}</td>
+<td>
+<form action="/file_downloads_services" method="POST">
+             <input type="hidden" name="number_of_dogovor" value="{{ row.0 }}">
+    <input type="hidden" name="date_of_rent" value="{{ row.1 }}">
+    <input type="hidden" name="owner" value="Дмитриев Ермак Созонович">
+    <input type="hidden" name="name" value="{{ row.4 }}">
+            <input type="submit" class="btn btn-dark" value="Скачать">
+      </form>
+  </td>
+  </tr>
+    {% endif %}
+  {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

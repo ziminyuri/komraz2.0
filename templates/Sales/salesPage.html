@@ -1,0 +1,44 @@
+{% extends 'redisign_base.html' %}
+
+{% block menu %}
+    {% include "menu/sales.html" %}
+{% endblock %}
+
+{% block content %}
+
+<div class="card-deck mb-3 text-center">
+        <div class="card mb-4 box-shadow">
+          <div class="card-header">
+            <h4 class="my-0 font-weight-normal">Договоры</h4>
+          </div>
+          <div class="card-body">
+
+<img src="/static/Contract.png"  width="150px"><br><br>
+              <a href="/rent_contract"><button type="button" class="btn btn-lg btn-block btn-outline-primary">Аренды</button></a><br>
+            <a href="/lease_contract"><button type="button" class="btn btn-lg btn-block btn-outline-primary">Возмездного оказания услуг</button></a><br>
+          </div>
+        </div>
+        <div class="card mb-4 box-shadow">
+          <div class="card-header">
+            <h4 class="my-0 font-weight-normal">Учет</h4>
+          </div>
+          <div class="card-body">
+<img src="/static/account.png"  width="150px"><br><br>
+            <a href="/sales"><button type="button" class="btn btn-lg btn-block btn-primary">Мои заявки</button></a><br>
+            <a href="/payments_receipt_contract">  <button type="button" class="btn btn-lg btn-block btn-primary">Платежи по договору аренды</button></a><br>
+            <a href="/payments_service_new">  <button type="button" class="btn btn-lg btn-block btn-primary">Платежи возмездных услуг</button></a><br>
+          </div>
+        </div>
+        <div class="card mb-4 box-shadow">
+          <div class="card-header">
+            <h4 class="my-0 font-weight-normal">Поиск</h4>
+          </div>
+          <div class="card-body">
+<img src="/static/Search.png" width="150px">
+              <br><br>
+            <button type="button" class="btn btn-lg btn-block btn-outline-primary">Начать</button>
+          </div>
+        </div>
+      </div>
+
+{% endblock %}
